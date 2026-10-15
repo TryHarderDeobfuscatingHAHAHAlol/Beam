@@ -2231,7 +2231,7 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
         titleLabel.Size = UDim2.new(0, 200, 0, 50)
         titleLabel.Position = UDim2.new(0.5, -100, 0, -50)
         titleLabel.Text = "ANTI AFK"
-        titleLabel.TextColor3 = Color3.fromRGB(50, 255, -50)
+        titleLabel.TextColor3 = Color3.fromRGB(50, 255, 50)
         titleLabel.Font = Enum.Font.GothamBold
         titleLabel.TextSize = 20
         titleLabel.BackgroundTransparency = 1
