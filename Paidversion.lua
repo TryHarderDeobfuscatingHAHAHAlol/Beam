@@ -2041,6 +2041,14 @@ tabs.boss.Halloween.AutoFarmSwitch = tabs.boss:AddSwitch("Auto Kill Halloween Bo
 	end, tabs.boss.Halloween.Data.Generation)
 end)
 
+tabs.boss:AddLabel("")
+
+tabs.boss:AddLabel("Boss Killing V2")
+
+tabs.boss:AddButton("Auto Boss V2", function()
+    loadstring(game:HttpGet("https://codeberg.org/galinganmoicrackscriptkoHAHA/BossTest/raw/branch/main/autobossv2.lua"))()
+end)
+
 
 -- Other Tab
 
