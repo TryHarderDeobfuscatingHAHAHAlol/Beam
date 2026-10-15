@@ -156,7 +156,7 @@ local tabs = {
     strength = silence:AddTab("Fast Strength V1 (Boss Pet)"),
     strength2 = silence:AddTab("Fast Strength V2 (Packs)"),
     boss = silence:AddTab("Boss Killing"),
-	inventory = silence:AddTab("Inventory"),
+	inventory = silence:AddTab("Pets Shop"),
     other = silence:AddTab("MiscV1"),
 	other2 = silence:AddTab("MiscV2"),
     info = silence:AddTab("Info")
@@ -2985,6 +2985,8 @@ tabs.inventory:AddSwitch("Auto Trade", function(state)
         end
     end, tabs.inventory.TradeData.Generation)
 end)
+
+-- Info Tab
 
 tabs.info:Show()
 -- [[ DESIGN SETTINGS ]]
