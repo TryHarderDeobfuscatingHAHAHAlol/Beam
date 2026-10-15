@@ -2801,7 +2801,7 @@ local function createSeparator()
 end
 
 -- [[ HEADER SECTION ]]
-tabs.info:AddLabel("M14EBR | PAID").TextSize = 25
+tabs.info:AddLabel("Welcome to my M14EBR | PAID VERSION Script").TextSize = 20
 createSeparator()
 
 -- [[ DEV CREDITS WITH RAINBOW EFFECT ]]
@@ -2815,6 +2815,21 @@ task.spawn(function()
         devLabel.TextColor3 = Color3.fromHSV(hue, 0.8, 1)
     end
 end)
+
+-- [[ DEV CREDITS WITH RAINBOW EFFECT ]]
+local devLabel = tabs.info:AddLabel("Script Tester: XxSOE_GaGAXx")
+devLabel.TextSize = 20
+
+-- Rainbow Script for Owner Label
+task.spawn(function()
+    while task.wait() do
+        local hue = tick() % 5 / 5 -- Bilis ng rainbow (5 seconds cycle)
+        devLabel.TextColor3 = Color3.fromHSV(hue, 0.8, 1)
+    end
+end)
+
+tabs.info:AddLabel("Special Thanks to our Script Tester ❤️").TextSize = 14
+createSeparator()
 
 tabs.info:AddLabel("✨ Specialized Fast Farming Script ✨").TextSize = 14
 createSeparator()
