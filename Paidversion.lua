@@ -156,6 +156,7 @@ local tabs = {
     strength = silence:AddTab("Fast Strength V1 (Boss Pet)"),
     strength2 = silence:AddTab("Fast Strength V2 (Packs)"),
     boss = silence:AddTab("Boss Killing"),
+	inventory = silence:AddTab("Inventory"),
     other = silence:AddTab("MiscV1"),
 	other2 = silence:AddTab("MiscV2"),
     info = silence:AddTab("Info")
@@ -2748,6 +2749,241 @@ end
     tabs.other2.darkenSky()
     services.replicatedstorage.shared.assets.ui.strengthFrame:Destroy()
     services.replicatedstorage.shared.assets.ui.durabilityFrame:Destroy()
+end)
+
+-- Inventory Tab
+
+tabs.inventory:AddLabel("Pet Shop")
+
+tabs.inventory.PetShopRuntime = services.ReplicatedStorage:WaitForChild("shared"):WaitForChild("runtime")
+tabs.inventory.PetShopFolder = tabs.inventory.PetShopRuntime:WaitForChild("cPetShopFolder")
+tabs.inventory.PetShopRemote = services.ReplicatedStorage.rEvents:WaitForChild("cPetShopRemote")
+
+tabs.inventory.PetShopData = {
+	PetList = {},
+	Selected = {},
+	SelectedList = {},
+	BuyAmount = 1
+}
+
+tabs.inventory.AuraData = {
+	AuraList = {},
+	Selected = {},
+	SelectedList = {},
+	BuyAmount = 1
+}
+
+tabs.inventory.EvolveData = {Selected = {}, SelectedList = {}, Amount = 1}
+
+for _, item in ipairs(tabs.inventory.PetShopFolder:GetChildren()) do
+	if item:GetAttribute("IsPowerUp") == true then
+		table.insert(tabs.inventory.AuraData.AuraList, item.Name)
+	else
+		table.insert(tabs.inventory.PetShopData.PetList, item.Name)
+	end
+end
+table.sort(tabs.inventory.PetShopData.PetList)
+table.sort(tabs.inventory.AuraData.AuraList)
+
+tabs.inventory.BuyPetLabel = tabs.inventory:AddLabel("Selected Pets: None")
+tabs.inventory.BuyPetDropdown = tabs.inventory:AddDropdown("Choose Pets", function(text)
+	utils.toggleSelection(tabs.inventory.PetShopData.Selected, tabs.inventory.PetShopData.SelectedList, text, tabs.inventory.BuyPetLabel, "Selected Pets: ")
+end)
+for _, petName in ipairs(tabs.inventory.PetShopData.PetList) do tabs.inventory.BuyPetDropdown:Add(petName) end
+
+tabs.inventory:AddTextBox("Buy Amount:", function(text)
+	tabs.inventory.PetShopData.BuyAmount = math.max(1, math.floor(tonumber(text) or 1))
+end, {clear = false})
+
+tabs.inventory:AddSwitch("Buy Pet", function(bool)
+	_G.AutoHatchPet = bool
+	if bool then
+		task.spawn(function()
+			while _G.AutoHatchPet do
+				for _, petName in ipairs(tabs.inventory.PetShopData.SelectedList) do
+					tabs.inventory.runtime.selectedPet = tabs.inventory.PetShopFolder:FindFirstChild(petName)
+					if tabs.inventory.runtime.selectedPet then
+						for _ = 1, tabs.inventory.PetShopData.BuyAmount do
+							task.spawn(function(selectedPet)
+								pcall(function() tabs.inventory.PetShopRemote:InvokeServer(selectedPet) end)
+							end, tabs.inventory.runtime.selectedPet)
+						end
+					end
+				end
+				task.wait(0.1)
+			end
+		end)
+	end
+end)
+
+tabs.inventory:AddLabel("Auras:")
+
+tabs.inventory.AuraLabel = tabs.inventory:AddLabel("Selected Auras: None")
+tabs.inventory.AuraDropdown = tabs.inventory:AddDropdown("Select Auras", function(text)
+	utils.toggleSelection(tabs.inventory.AuraData.Selected, tabs.inventory.AuraData.SelectedList, text, tabs.inventory.AuraLabel, "Selected Auras: ")
+end)
+for _, auraName in ipairs(tabs.inventory.AuraData.AuraList) do tabs.inventory.AuraDropdown:Add(auraName) end
+
+tabs.inventory:AddTextBox("Buy Amount:", function(text)
+	tabs.inventory.AuraData.BuyAmount = math.max(1, math.floor(tonumber(text) or 1))
+end, {clear = false})
+
+tabs.inventory:AddSwitch("Buy Aura", function(bool)
+	_G.AutoHatchAura = bool
+	if bool then
+		task.spawn(function()
+			while _G.AutoHatchAura do
+				for _, auraName in ipairs(tabs.inventory.AuraData.SelectedList) do
+					tabs.inventory.runtime.selectedAura = tabs.inventory.PetShopFolder:FindFirstChild(auraName)
+					if tabs.inventory.runtime.selectedAura then
+						for _ = 1, tabs.inventory.AuraData.BuyAmount do
+							task.spawn(function(selectedAura)
+								pcall(function() tabs.inventory.PetShopRemote:InvokeServer(selectedAura) end)
+							end, tabs.inventory.runtime.selectedAura)
+						end
+					end
+				end
+				task.wait(0.1)
+			end
+		end)
+	end
+end)
+
+tabs.inventory:AddLabel("Auto Evolve System")
+
+tabs.inventory.EvolveLabel = tabs.inventory:AddLabel("Selected Pets: None")
+tabs.inventory.EvolvePetDropdown = tabs.inventory:AddDropdown("Choose Pets", function(text)
+	utils.toggleSelection(tabs.inventory.EvolveData.Selected, tabs.inventory.EvolveData.SelectedList, text, tabs.inventory.EvolveLabel, "Selected Pets: ")
+end)
+for _, petName in ipairs(tabs.inventory.PetShopData.PetList) do tabs.inventory.EvolvePetDropdown:Add(petName) end
+
+tabs.inventory:AddTextBox("Evolve Amount:", function(text)
+	tabs.inventory.EvolveData.Amount = math.max(1, math.floor(tonumber(text) or 1))
+end, {clear = false})
+
+tabs.inventory.AutoEvolveRunning = false
+
+tabs.inventory:AddSwitch("Auto Evolve", function(state)
+    tabs.inventory.AutoEvolveRunning = state
+    if not state then return end
+
+    task.spawn(function()
+        while tabs.inventory.AutoEvolveRunning do
+			for _, petName in ipairs(tabs.inventory.EvolveData.SelectedList) do
+				for _ = 1, tabs.inventory.EvolveData.Amount do
+					services.ReplicatedStorage.rEvents.petEvolveEvent:FireServer("evolvePet", petName)
+				end
+			end
+            task.wait(0.5)
+        end
+    end)
+end)
+
+
+
+tabs.inventory:AddLabel("Auto Trade System:")
+
+tabs.inventory.TradeData = {SelectedPlayers = {}, SelectedPlayerList = {}, SelectedPets = {}, SelectedPetList = {}, Generation = 0}
+
+tabs.inventory.TradePlayerLabel = tabs.inventory:AddLabel("Selected Players: None")
+tabs.inventory.TradePlayerDropdown = tabs.inventory:AddDropdown("Choose Player", function(name)
+    tabs.inventory.runtime.username_2258 = name:match(" | (.+)") or name
+    utils.toggleSelection(tabs.inventory.TradeData.SelectedPlayers, tabs.inventory.TradeData.SelectedPlayerList, tabs.inventory.runtime.username_2258, tabs.inventory.TradePlayerLabel, "Selected Players: ")
+end)
+
+tabs.inventory:AddButton("Add All Players", function()
+	for _, player in ipairs(services.Players:GetPlayers()) do
+		if player ~= services.Players.LocalPlayer and not tabs.inventory.TradeData.SelectedPlayers[player.Name] then
+			tabs.inventory.TradeData.SelectedPlayers[player.Name] = true
+			table.insert(tabs.inventory.TradeData.SelectedPlayerList, player.Name)
+		end
+	end
+	tabs.inventory.TradePlayerLabel.Text = "Selected Players: " .. (#tabs.inventory.TradeData.SelectedPlayerList > 0 and table.concat(tabs.inventory.TradeData.SelectedPlayerList, ", ") or "None")
+end)
+
+for _, player in ipairs(services.Players:GetPlayers()) do
+    if player ~= services.Players.LocalPlayer then
+        tabs.inventory.TradePlayerDropdown:Add(player.DisplayName .. " | " .. player.Name)
+    end
+end
+
+services.Players.PlayerAdded:Connect(function(player)
+    if player ~= services.Players.LocalPlayer then
+        tabs.inventory.TradePlayerDropdown:Add(player.DisplayName .. " | " .. player.Name)
+    end
+end)
+
+services.Players.PlayerRemoving:Connect(function(player)
+    tabs.inventory.TradePlayerDropdown:Remove(player.DisplayName .. " | " .. player.Name)
+    if tabs.inventory.TradeData.SelectedPlayers[player.Name] then
+		utils.toggleSelection(tabs.inventory.TradeData.SelectedPlayers, tabs.inventory.TradeData.SelectedPlayerList, player.Name, tabs.inventory.TradePlayerLabel, "Selected Players: ")
+	end
+end)
+
+tabs.inventory.TradePetLabel = tabs.inventory:AddLabel("Selected Pets: None")
+tabs.inventory.TradePetDropdown = tabs.inventory:AddDropdown("Choose Pets", function(text)
+	utils.toggleSelection(tabs.inventory.TradeData.SelectedPets, tabs.inventory.TradeData.SelectedPetList, text, tabs.inventory.TradePetLabel, "Selected Pets: ")
+end)
+for _, petName in ipairs(tabs.inventory.PetShopData.PetList) do tabs.inventory.TradePetDropdown:Add(petName) end
+
+
+
+tabs.inventory.AutoTradeRunning = false
+
+tabs.inventory:AddSwitch("Auto Trade", function(state)
+    tabs.inventory.AutoTradeRunning = state
+	tabs.inventory.TradeData.Generation += 1
+    if not state then return end
+
+    task.spawn(function(generation)
+        while tabs.inventory.AutoTradeRunning and tabs.inventory.TradeData.Generation == generation do
+            if #tabs.inventory.TradeData.SelectedPlayerList > 0 and #tabs.inventory.TradeData.SelectedPetList > 0 then
+				for _, username in ipairs(tabs.inventory.TradeData.SelectedPlayerList) do
+					tabs.inventory.runtime.tradePlayer = services.Players:FindFirstChild(username)
+					if not tabs.inventory.AutoTradeRunning or tabs.inventory.TradeData.Generation ~= generation then break end
+					if tabs.inventory.runtime.tradePlayer then
+						tabs.inventory.runtime.tradingEvent = services.ReplicatedStorage.rEvents.tradingEvent
+						tabs.inventory.runtime.unique = game.Players.LocalPlayer.petsFolder.Unique
+
+						tabs.inventory.runtime.tradingEvent:FireServer(
+							"sendTradeRequest",
+							tabs.inventory.runtime.tradePlayer
+						)
+
+						task.wait(0.5)
+
+						tabs.inventory.runtime.offered = 0
+						tabs.inventory.runtime.offeredPets = {}
+						repeat
+							tabs.inventory.runtime.addedPet = false
+							for _, selectedName in ipairs(tabs.inventory.TradeData.SelectedPetList) do
+								for _, pet in ipairs(tabs.inventory.runtime.unique:GetChildren()) do
+									if pet.Name == selectedName and not tabs.inventory.runtime.offeredPets[pet] then
+										tabs.inventory.runtime.tradingEvent:FireServer("offerItem", pet)
+										tabs.inventory.runtime.offeredPets[pet] = true
+										tabs.inventory.runtime.offered += 1
+										tabs.inventory.runtime.addedPet = true
+										task.wait(0.01)
+										break
+									end
+								end
+								if not tabs.inventory.AutoTradeRunning or tabs.inventory.TradeData.Generation ~= generation or tabs.inventory.runtime.offered >= 6 then break end
+							end
+						until not tabs.inventory.AutoTradeRunning or tabs.inventory.TradeData.Generation ~= generation or tabs.inventory.runtime.offered >= 6 or not tabs.inventory.runtime.addedPet
+
+						task.wait(0.05)
+
+						if tabs.inventory.AutoTradeRunning and tabs.inventory.TradeData.Generation == generation then
+							tabs.inventory.runtime.tradingEvent:FireServer("acceptTrade")
+							task.wait(2)
+						end
+					end
+				end
+            end
+
+            task.wait(2)
+        end
+    end, tabs.inventory.TradeData.Generation)
 end)
 
 tabs.info:Show()
