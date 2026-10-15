@@ -2751,6 +2751,7 @@ end
     services.replicatedstorage.shared.assets.ui.durabilityFrame:Destroy()
 end)
 
+
 -- Inventory Tab
 
 tabs.inventory:AddLabel("Pet Shop")
@@ -2880,7 +2881,6 @@ tabs.inventory:AddSwitch("Auto Evolve", function(state)
 end)
 
 
-
 tabs.inventory:AddLabel("Auto Trade System:")
 
 tabs.inventory.TradeData = {SelectedPlayers = {}, SelectedPlayerList = {}, SelectedPets = {}, SelectedPetList = {}, Generation = 0}
@@ -2985,6 +2985,7 @@ tabs.inventory:AddSwitch("Auto Trade", function(state)
         end
     end, tabs.inventory.TradeData.Generation)
 end)
+
 
 -- Info Tab
 
