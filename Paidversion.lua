@@ -2228,18 +2228,18 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
         afkGui.Parent = localPlayer:WaitForChild("PlayerGui")
 
         local titleLabel = Instance.new("TextLabel", afkGui)
-        titleLabel.Size = UDim2.new(0, 200, 0, 25)
+        titleLabel.Size = UDim2.new(0, 200, 0, 50)
         titleLabel.Position = UDim2.new(0.5, -100, 0, 20)
         titleLabel.Text = "ANTI AFK"
-        titleLabel.TextColor3 = Color3.fromRGB(50, 255, 50)
+        titleLabel.TextColor3 = Color3.fromRGB(50, 255, -50)
         titleLabel.Font = Enum.Font.GothamBold
         titleLabel.TextSize = 20
         titleLabel.BackgroundTransparency = 1
         titleLabel.TextTransparency = 1
 
         local timerLabel = Instance.new("TextLabel", afkGui)
-        timerLabel.Size = UDim2.new(0, 200, 0, 25)
-        timerLabel.Position = UDim2.new(0.5, -100, 0, 40)
+        timerLabel.Size = UDim2.new(0, 200, 0, 30)
+        timerLabel.Position = UDim2.new(0.5, -100, 0, -20)
         timerLabel.Text = "00:00:00"
         timerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         timerLabel.Font = Enum.Font.GothamBold
