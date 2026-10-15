@@ -151,7 +151,7 @@ local silence = library:AddWindow("M14EBR | Paid Version - Fast Farming", {
     can_resize = false
 })
 
-local tabs {
+local tabs = {
 	rebirths = silence:AddTab("Fast Rebirth"),
 	strength = silence:AddTab("Fast Strength V1 (Boss Pet)"),
 	strength2 = silence:AddTab("Fast Strength V2 (Packs"),
