@@ -2201,17 +2201,24 @@ end)
 
 local Players = game:GetService("Players")
 local VirtualUser = game:GetService("VirtualUser")
+local TeleportService = game:GetService("TeleportService")
+local CoreGui = game:GetService("CoreGui")
+local GuiService = game:GetService("GuiService")
 local localPlayer = Players.LocalPlayer
 
 local afkGui = nil
 local afkConnection = nil
+local disconnectConnection = nil
+local promptConnection = nil
 
 -- Ilagay ang AddSwitch sa itaas
-tabs.other:AddSwitch("Anti-AFK", function(state)
+tabs.other:AddSwitch("Anti-AFK & Protection", function(state)
     if state then
         -- Clean up any existing instances just in case
         if afkGui then afkGui:Destroy() end
         if afkConnection then afkConnection:Disconnect() end
+        if disconnectConnection then disconnectConnection:Disconnect() end
+        if promptConnection then promptConnection:Disconnect() end
 
         afkGui = Instance.new("ScreenGui")
         afkGui.Name = "AntiAFKGui"
@@ -2281,6 +2288,27 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
             task.wait(1)
             VirtualUser:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
         end)
+
+        -- Anti-Disconnect & Anti-Server Shutdown (Auto Reconnect)
+        local vu = game:GetService("VirtualUser")
+        disconnectConnection = game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
+            if child.Name == "ErrorPrompt" then
+                local message = child:FindFirstChild("MessageArea", true)
+                if message and message:FindFirstChild("ErrorFrame") then
+                    task.wait(2)
+                    TeleportService:Teleport(game.PlaceId, localPlayer)
+                end
+            end
+        end)
+
+        -- Anti-Kick (Auto-dismiss error prompts kung sakaling lumabas)
+        promptConnection = GuiService.ErrorMessageChanged:Connect(function()
+            local errorPrompt = CoreGui.RobloxPromptGui.promptOverlay:FindFirstChild("ErrorPrompt")
+            if errorPrompt then
+                TeleportService:Teleport(game.PlaceId, localPlayer)
+            end
+        end)
+
     else
         -- Kapag pinatay o in-off ang switch
         if afkGui then 
@@ -2290,6 +2318,14 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
         if afkConnection then 
             afkConnection:Disconnect() 
             afkConnection = nil 
+        end
+        if disconnectConnection then
+            disconnectConnection:Disconnect()
+            disconnectConnection = nil
+        end
+        if promptConnection then
+            promptConnection:Disconnect()
+            promptConnection = nil
         end
     end
 end):Set(true)
