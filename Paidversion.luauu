@@ -2212,7 +2212,7 @@ local disconnectConnection = nil
 local promptConnection = nil
 
 -- Ilagay ang AddSwitch sa itaas
-tabs.other:AddSwitch("Anti-AFK & Protection", function(state)
+tabs.other:AddSwitch("Anti-AFK", function(state)
     if state then
         -- Clean up any existing instances just in case
         if afkGui then afkGui:Destroy() end
