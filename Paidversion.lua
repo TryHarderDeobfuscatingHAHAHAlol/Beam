@@ -2204,6 +2204,8 @@ local VirtualUser = game:GetService("VirtualUser")
 local TeleportService = game:GetService("TeleportService")
 local CoreGui = game:GetService("CoreGui")
 local GuiService = game:GetService("GuiService")
+local StarterGui = game:GetService("StarterGui")
+
 local localPlayer = Players.LocalPlayer
 
 local afkGui = nil
@@ -2227,7 +2229,7 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
 
         local titleLabel = Instance.new("TextLabel", afkGui)
         titleLabel.Size = UDim2.new(0, 200, 0, 50)
-        titleLabel.Position = UDim2.new(0.5, -100, 0, -50)
+        titleLabel.Position = UDim2.new(0.5, -100, 0, 405) -- Inayos ko nang kaunti ang posisyon para makita sa itaas
         titleLabel.Text = "ANTI AFK"
         titleLabel.TextColor3 = Color3.fromRGB(50, 255, 50)
         titleLabel.Font = Enum.Font.GothamBold
@@ -2237,7 +2239,7 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
 
         local timerLabel = Instance.new("TextLabel", afkGui)
         timerLabel.Size = UDim2.new(0, 200, 0, 30)
-        timerLabel.Position = UDim2.new(0.5, -100, 0, -20)
+        timerLabel.Position = UDim2.new(0.5, -100, 0, 435)
         timerLabel.Text = "00:00:00"
         timerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         timerLabel.Font = Enum.Font.GothamBold
@@ -2290,23 +2292,43 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
         end)
 
         -- Anti-Disconnect & Anti-Server Shutdown (Auto Reconnect)
-        local vu = game:GetService("VirtualUser")
-        disconnectConnection = game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(child)
-            if child.Name == "ErrorPrompt" then
-                local message = child:FindFirstChild("MessageArea", true)
-                if message and message:FindFirstChild("ErrorFrame") then
-                    task.wait(2)
+        disconnectConnection = CoreGui:WaitForChild("RobloxPromptGui", 5)
+        if disconnectConnection then
+            local promptOverlay = CoreGui.RobloxPromptGui:FindFirstChild("promptOverlay")
+            if promptOverlay then
+                disconnectConnection = promptOverlay.ChildAdded:Connect(function(child)
+                    if child.Name == "ErrorPrompt" then
+                        local message = child:FindFirstChild("MessageArea", true)
+                        if message and message:FindFirstChild("ErrorFrame") then
+                            task.wait(2)
+                            TeleportService:Teleport(game.PlaceId, localPlayer)
+                        end
+                    end
+                end)
+            end
+        end
+
+        -- Anti-Kick (Auto-dismiss error prompts kung sakaling lumabas)
+        promptConnection = GuiService.ErrorMessageChanged:Connect(function()
+            local promptOverlay = CoreGui:FindFirstChild("RobloxPromptGui")
+            if promptOverlay then
+                local errorPrompt = promptOverlay:FindFirstChild("ErrorPrompt", true)
+                if errorPrompt then
                     TeleportService:Teleport(game.PlaceId, localPlayer)
                 end
             end
         end)
 
-        -- Anti-Kick (Auto-dismiss error prompts kung sakaling lumabas)
-        promptConnection = GuiService.ErrorMessageChanged:Connect(function()
-            local errorPrompt = CoreGui.RobloxPromptGui.promptOverlay:FindFirstChild("ErrorPrompt")
-            if errorPrompt then
-                TeleportService:Teleport(game.PlaceId, localPlayer)
-            end
+        -- Send Notification gamit ang pcall para maiwasan ang crash kung sakaling di pa loaded ang CoreGui
+        task.spawn(function()
+            pcall(function()
+                StarterGui:SetCore("SendNotification", {
+                    Title = "M14EBR - Anti-AFK";
+                    Text = "Anti-AFK successfully loaded";
+                    Icon = "rbxassetid://79956122844756"; -- Pinalitan ko ang format ng asset ID para mas sigurado
+                    Duration = 5;
+                })
+            end)
         end)
 
     else
@@ -2320,12 +2342,14 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
             afkConnection = nil 
         end
         if disconnectConnection then
-            disconnectConnection:Disconnect()
+            if typeof(disconnectConnection) == "RBXScriptConnection" then
+                disconnectConnection:Disconnect()
+            end
             disconnectConnection = nil
         end
-        if promptConnection then
-            promptConnection:Disconnect()
-            promptConnection = nil
+        if promptConnection then 
+            promptConnection:Disconnect() 
+            promptConnection = nil 
         end
     end
 end):Set(true)
