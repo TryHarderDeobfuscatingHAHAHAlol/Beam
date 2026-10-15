@@ -2228,8 +2228,8 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
         afkGui.Parent = localPlayer:WaitForChild("PlayerGui")
 
         local titleLabel = Instance.new("TextLabel", afkGui)
-        titleLabel.Size = UDim2.new(0, 200, 0, 50)
-        titleLabel.Position = UDim2.new(0.5, -100, 0, 405) -- Inayos ko nang kaunti ang posisyon para makita sa itaas
+        titleLabel.Size = UDim2.new(0, 200, 0, 25)
+        titleLabel.Position = UDim2.new(0.5, -100, 0, 20)
         titleLabel.Text = "ANTI AFK"
         titleLabel.TextColor3 = Color3.fromRGB(50, 255, 50)
         titleLabel.Font = Enum.Font.GothamBold
@@ -2238,8 +2238,8 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
         titleLabel.TextTransparency = 1
 
         local timerLabel = Instance.new("TextLabel", afkGui)
-        timerLabel.Size = UDim2.new(0, 200, 0, 30)
-        timerLabel.Position = UDim2.new(0.5, -100, 0, 435)
+        timerLabel.Size = UDim2.new(0, 200, 0, 25)
+        timerLabel.Position = UDim2.new(0.5, -100, 0, 40)
         timerLabel.Text = "00:00:00"
         timerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
         timerLabel.Font = Enum.Font.GothamBold
@@ -2325,7 +2325,7 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
                 StarterGui:SetCore("SendNotification", {
                     Title = "M14EBR - Anti-AFK";
                     Text = "Anti-AFK successfully loaded";
-                    Icon = "rbxassetid://79956122844756"; -- Pinalitan ko ang format ng asset ID para mas sigurado
+                    Icon = "https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=79956122844756"; -- Pinalitan ko ang format ng asset ID para mas sigurado
                     Duration = 5;
                 })
             end)
@@ -2841,7 +2841,7 @@ task.spawn(function()
 end)
 
 -- [[ DEV CREDITS WITH RAINBOW EFFECT ]]
-local devLabel = tabs.info:AddLabel("Script Tester: XxSOE_GaGAXx")
+local devLabel = tabs.info:AddLabel("Script Tester: XxSOE_GaGAxX")
 devLabel.TextSize = 20
 
 -- Rainbow Script for Owner Label
@@ -2869,7 +2869,7 @@ local tiktokBtn = tabs.info:AddButton("📋 COPY TIKTOK LINK", function()
         game.StarterGui:SetCore("SendNotification", {
             Title = "Link Copied!";
             Text = "Pa Follow na rin ako sa Tiktok.";
-            Icon = "rbxassetid://103401220143849"; -- Success Icon
+            Icon = "https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=79956122844756"; -- Success Icon
             Duration = 5;
         })
     else
