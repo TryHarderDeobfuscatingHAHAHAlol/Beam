@@ -2041,7 +2041,7 @@ tabs.boss.Halloween.AutoFarmSwitch = tabs.boss:AddSwitch("Auto Kill Halloween Bo
 	end, tabs.boss.Halloween.Data.Generation)
 end)
 
-tabs.boss:AddLabel("")
+tabs.boss:AddLabel("~~~~~~~~~~")
 
 tabs.boss:AddLabel("Boss Killing V2")
 
@@ -2229,7 +2229,7 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
 
         local titleLabel = Instance.new("TextLabel", afkGui)
         titleLabel.Size = UDim2.new(0, 200, 0, 50)
-        titleLabel.Position = UDim2.new(0.5, -100, 0, 20)
+        titleLabel.Position = UDim2.new(0.5, -100, 0, -50)
         titleLabel.Text = "ANTI AFK"
         titleLabel.TextColor3 = Color3.fromRGB(50, 255, -50)
         titleLabel.Font = Enum.Font.GothamBold
