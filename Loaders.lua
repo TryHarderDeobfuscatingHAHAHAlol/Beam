@@ -442,10 +442,8 @@ local function equipBestRebirthPets(isCurrent)
     return totalRebirthMultiplier, equippedCount
 end
 
-
 -- Rebirth Tab
 
-tabs.rebirths.leaderstats = lp.player:WaitForChild("leaderstats")
 tabs.rebirths.rebirths = tabs.rebirths.leaderstats:WaitForChild("Rebirths")
 tabs.rebirths.strength = tabs.rebirths.leaderstats:WaitForChild("Strength")
 tabs.rebirths.running = false
