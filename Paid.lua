@@ -65,7 +65,7 @@ local function isWhitelisted()
 end
 
 if not isWhitelisted() then
-    LocalPlayer:Kick("Pukinanginamo nagbayad kaba sakin?!")
+    LocalPlayer:Kick("From BossKenzou: gamit gusto, magbayad ayaw? isa kang ulol!")
     return
 end
 
