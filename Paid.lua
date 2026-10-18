@@ -2323,9 +2323,9 @@ tabs.other:AddSwitch("Anti-AFK", function(state)
         task.spawn(function()
             pcall(function()
                 StarterGui:SetCore("SendNotification", {
-                    Title = "M14EBR - Anti-AFK";
+                    Title = "M14EBR  Anti-AFK";
                     Text = "Anti-AFK successfully loaded";
-                    Icon = "https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=79956122844756"; -- Pinalitan ko ang format ng asset ID para mas sigurado
+                    Icon = "https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=79956122844756";
                     Duration = 5;
                 })
             end)
@@ -2608,7 +2608,7 @@ function equipPetsByName(name)
     end
 end
 
-tabs.other2:AddLabel("Equip Rep Pets")
+tabs.other2:AddLabel("Equip Boss Pets")
 
 tabs.other2:AddButton("Common Boss Pet", function()
     unequipPets()
@@ -2731,7 +2731,7 @@ tabs.other2:AddButton("Full Optimization", function()
         end
     end
 
-    tabs.other.darkenSky = function()
+    tabs.other2.darkenSky = function()
         for _, v in pairs(services.lighting:GetChildren()) do
             if v:IsA("Sky") then
                 v:Destroy()
@@ -2869,7 +2869,7 @@ local tiktokBtn = tabs.info:AddButton("📋 COPY TIKTOK LINK", function()
         game.StarterGui:SetCore("SendNotification", {
             Title = "Link Copied!";
             Text = "Pa Follow na rin ako sa Tiktok.";
-            Icon = "https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=79956122844756"; -- Success Icon
+            Icon = "https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=79956122844756";
             Duration = 5;
         })
     else
