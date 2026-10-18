@@ -142,14 +142,14 @@ end
 
 function Utils.greeting()
 	local hour = os.date("*t").hour
-	if hour >= 6 and hour < 12 then return "Magandang Umaga " .. players.LocalPlayer.DisplayName
-	elseif hour >= 12 and hour < 13 then return "Magandang Tanghali " .. players.LocalPlayer.DisplayName
-	elseif hour >= 13 and hour < 19 then return "Magandang Hapon " .. players.LocalPlayer.DisplayName
-	elseif hour >= 19 and hour < 22 then return "Magandang Gabi " .. players.LocalPlayer.DisplayName
-	else return "Good Night " .. players.LocalPlayer.DisplayName end
+	if hour >= 6 and hour < 12 then return "Magandang Umaga" .. players.LocalPlayer.DisplayName
+	elseif hour >= 12 and hour < 13 then return "Magandang Tanghali" .. players.LocalPlayer.DisplayName
+	elseif hour >= 13 and hour < 19 then return "Magandang Hapon" .. players.LocalPlayer.DisplayName
+	elseif hour >= 19 and hour < 22 then return "Magandang Gabi" .. players.LocalPlayer.DisplayName
+	else return "Good Night" .. players.LocalPlayer.DisplayName end
 end
 
-local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua", true))()
+local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua?cache=" .. tostring(os.time()), true))()
 local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. Utils.greeting(), {
     title_bar = {Color3.fromRGB(128, 128, 128), Color3.fromRGB(0, 0, 0), Color3.fromRGB(0, 0, 0)},
     title_bar_transparency = 0.2,
