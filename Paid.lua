@@ -140,8 +140,16 @@ services.touchParts = function(part, hand, state)
     return pcall(firetouchinterest, part, hand, state)
 end
 
+local function Utils.greeting()
+    local hour = os.date("*t").hour
+    if hour >= 5 and hour < 12 then return "Magandang Umaga"
+    elseif hour >= 12 and hour < 18 then return "Magandang Hapon"
+    elseif hour >= 18 and hour < 24 then return "Magandang Gabi"
+    else return "Good Night" .. PlayerData.DisplayName end
+end
+
 local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua", true))()
-local silence = library:AddWindow("M14EBR | Paid Version - Fast Farming", {
+local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. Utils.greeting(), {
     title_bar = {Color3.fromRGB(128, 128, 128), Color3.fromRGB(0, 0, 0), Color3.fromRGB(0, 0, 0)},
     title_bar_transparency = 0.2,
     background = {Color3.fromRGB(40, 40, 40), Color3.fromRGB(0, 0, 0), Color3.fromRGB(80, 80, 80)},
