@@ -140,17 +140,17 @@ services.touchParts = function(part, hand, state)
     return pcall(firetouchinterest, part, hand, state)
 end
 
-function Utils.greeting()
-	local hour = os.date("*t").hour
-	if hour >= 6 and hour < 12 then return "Magandang Umaga" .. players.LocalPlayer.DisplayName
-	elseif hour >= 12 and hour < 13 then return "Magandang Tanghali" .. players.LocalPlayer.DisplayName
-	elseif hour >= 13 and hour < 19 then return "Magandang Hapon" .. players.LocalPlayer.DisplayName
-	elseif hour >= 19 and hour < 22 then return "Magandang Gabi" .. players.LocalPlayer.DisplayName
-	else return "Good Night" .. players.LocalPlayer.DisplayName end
+local function greeting(hour)
+    hour = hour or os.date("*t").hour
+    if hour >= 6 and hour < 12 then return "Magandang Umaga!" .. players.LocalPlayer.DisplayName
+    elseif hour >= 12 and hour < 13 then return "Magandang Tanghali!" .. players.LocalPlayer.DisplayName
+    elseif hour >= 13 and hour < 19 then return "Magandang Hapon!" .. players.LocalPlayer.DisplayName
+    elseif hour >= 19 and hour < 22 then return "Magandang Gabi!" .. players.LocalPlayer.DisplayName
+    else return "Good Night!" .. players.LocalPlayer.DisplayName
 end
 
-local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua?cache=" .. tostring(os.time()), true))()
-local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. Utils.greeting(), {
+local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua", true))()
+local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. greeting(), {
     title_bar = {Color3.fromRGB(128, 128, 128), Color3.fromRGB(0, 0, 0), Color3.fromRGB(0, 0, 0)},
     title_bar_transparency = 0.2,
     background = {Color3.fromRGB(40, 40, 40), Color3.fromRGB(0, 0, 0), Color3.fromRGB(80, 80, 80)},
@@ -167,7 +167,7 @@ task.spawn(function()
     while titleGeneration == _G.SilenceFarmingTitleGeneration do
         task.wait(60)
         if titleGeneration == _G.SilenceFarmingTitleGeneration then
-            silence:SetTitle("M14EBR | PAID | Fast Farming - " .. Utils.greeting())
+            silence:SetTitle("M14EBR | PAID | Fast Farming - " .. greeting())
         end
     end
 end)
