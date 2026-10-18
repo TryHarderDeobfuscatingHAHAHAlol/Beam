@@ -140,16 +140,17 @@ services.touchParts = function(part, hand, state)
     return pcall(firetouchinterest, part, hand, state)
 end
 
-local function greeting(hour)
-    hour = os.date("*t").hour
-    if hour >= 5 and hour < 12 then return "Magandang Umaga" .. PlayerData.DisplayName
-    elseif hour >= 12 and hour < 18 then return "Magandang Hapon" .. PlayerData.DisplayName
-    elseif hour >= 18 and hour < 24 then return "Magandang Gabi" .. PlayerData.DisplayName
-    else return "Good Night" .. PlayerData.DisplayName end
+function Utils.greeting()
+	local hour = os.date("*t").hour
+	if hour >= 6 and hour < 12 then return "Magandang Umaga " .. PlayerData.DisplayName
+	elseif hour >= 12 and hour < 13 then return "Magandang Tanghali " .. PlayerData.DisplayName
+	elseif hour >= 13 and hour < 19 then return "Magandang Hapon " .. PlayerData.DisplayName
+	elseif hour >= 19 and hour < 22 then return "Magandang Gabi " .. PlayerData.DisplayName
+	else return "Good Night " .. PlayerData.DisplayName end
 end
 
 local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua", true))()
-local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. greeting(), {
+local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. Utils.greeting(), {
     title_bar = {Color3.fromRGB(128, 128, 128), Color3.fromRGB(0, 0, 0), Color3.fromRGB(0, 0, 0)},
     title_bar_transparency = 0.2,
     background = {Color3.fromRGB(40, 40, 40), Color3.fromRGB(0, 0, 0), Color3.fromRGB(80, 80, 80)},
@@ -158,18 +159,6 @@ local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. greeting(
     min_size = Vector2.new(500, 560),
     can_resize = false
 })
-
-_G.SilenceFarmingTitleGeneration = (_G.SilenceFarmingTitleGeneration or 0) + 1
-local titleGeneration = _G.SilenceFarmingTitleGeneration
-
-task.spawn(function()
-    while titleGeneration == _G.SilenceFarmingTitleGeneration do
-        task.wait(60)
-        if titleGeneration == _G.SilenceFarmingTitleGeneration then
-            silence:SetTitle("Silence | Fast Farming - " .. greeting())
-        end
-    end
-end)
 
 local tabs = {
     rebirths = silence:AddTab("Fast Rebirth"),
