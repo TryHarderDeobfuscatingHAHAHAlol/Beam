@@ -142,13 +142,10 @@ end
 
 local function greeting(hour)
     hour = hour or os.date("*t").hour
-    local localPlayer = players.LocalPlayer
-    local playerName = localPlayer and localPlayer.DisplayName or "Player"
-    
-    if hour >= 6 and hour < 12 then return "Magandang Umaga, " .. localPlayer.DisplayName .. "!"
-    elseif hour >= 12 and hour < 19 then return "Magandang Hapon, " .. localPlayer.DisplayName .. "!"
-    elseif hour >= 19 and hour < 22 then return "Magandang Gabi, " .. localPlayer.DisplayName .. "!"
-    else return "Tulog kana TANGA, " .. localPlayer.DisplayName .. "!" end
+    if hour >= 6 and hour < 12 then return "Magandang Umaga, " .. players.LocalPlayer.DisplayName .. "!"
+    elseif hour >= 12 and hour < 19 then return "Magandang Hapon, " .. players.LocalPlayer.DisplayName .. "!"
+    elseif hour >= 19 and hour < 22 then return "Magandang Gabi, " .. players.LocalPlayer.DisplayName .. "!"
+    else return "Good Night Sayo TANGA, " .. players.LocalPlayer.DisplayName .. "!" end
 end
 
 local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua", true))()
