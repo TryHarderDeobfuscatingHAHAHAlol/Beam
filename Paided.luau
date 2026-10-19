@@ -140,14 +140,6 @@ services.touchParts = function(part, hand, state)
     return pcall(firetouchinterest, part, hand, state)
 end
 
-local function greeting(hour)
-    hour = hour or os.date("*t").hour
-    if hour >= 6 and hour < 12 then return "Magandang Umaga! " .. LocalPlayer.DisplayName
-    elseif hour >= 12 and hour < 19 then return "Magandang Hapon! " .. LocalPlayer.DisplayName
-    elseif hour >= 19 and hour < 22 then return "Magandang Gabi! " .. LocalPlayer.DisplayName
-    else return "Good Night sayo BINGOT! " .. LocalPlayer.DisplayName end
-end
-
 local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua", true))()
 local silence = library:AddWindow("AN94 | PAID | Fast Farming - " .. greeting(), {
     title_bar = {Color3.fromRGB(128, 128, 128), Color3.fromRGB(0, 0, 0), Color3.fromRGB(0, 0, 0)},
@@ -2790,6 +2782,7 @@ end
     services.replicatedstorage.shared.assets.ui.durabilityFrame:Destroy()
 end)
 
+
 -- Other3 Tab
 
 tabs.other3.tpE = function(position)
@@ -2895,11 +2888,11 @@ end)
 
 -- [[ STATUS SECTION ]]
 tabs.info:AddLabel("💠 Script Status: [ ONLINE ]")
-tabs.info:AddLabel("🚀 PAID VERSION: 1.0")
+tabs.info:AddLabel("🚀 PAID VERSION: 1.1")
 createSeparator()
 
 -- [[ FOOTER SECTION - THE "ON TOP" ANIMATION ]]
-local wLabel = tabs.info:AddLabel("🔥 M14EBR ON TOP 🔥")
+local wLabel = tabs.info:AddLabel("🔥 AN94 ON TOP 🔥")
 wLabel.TextSize = 35
 wLabel.Font = Enum.Font.LuckiestGuy
 
