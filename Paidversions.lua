@@ -142,14 +142,14 @@ end
 
 local function greeting(hour)
     hour = hour or os.date("*t").hour
-    if hour >= 6 and hour < 12 then return "Magandang Umaga, " .. lp.LocalPlayer.DisplayName .. "!"
-    elseif hour >= 12 and hour < 19 then return "Magandang Hapon, " .. lp.LocalPlayer.DisplayName .. "!"
-    elseif hour >= 19 and hour < 22 then return "Magandang Gabi, " .. lp.LocalPlayer.DisplayName .. "!"
-    else return "Good Night Sayo BINGOT!, " .. lp.LocalPlayer.DisplayName .. "!" end
+    if hour >= 6 and hour < 12 then return "Magandang Umaga, " .. LocalPlayer.DisplayName .. "!"
+    elseif hour >= 12 and hour < 19 then return "Magandang Hapon, " .. LocalPlayer.DisplayName .. "!"
+    elseif hour >= 19 and hour < 22 then return "Magandang Gabi, " .. LocalPlayer.DisplayName .. "!"
+    else return "Good Night Sayo BINGOT!, " .. LocalPlayer.DisplayName .. "!" end
 end
 
 local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua", true))()
-local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. greeting(), {
+local silence = library:AddWindow("M14EBR | PAID | Fast Farming", {
     title_bar = {Color3.fromRGB(128, 128, 128), Color3.fromRGB(0, 0, 0), Color3.fromRGB(0, 0, 0)},
     title_bar_transparency = 0.2,
     background = {Color3.fromRGB(40, 40, 40), Color3.fromRGB(0, 0, 0), Color3.fromRGB(80, 80, 80)},
@@ -158,13 +158,6 @@ local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. greeting(
     min_size = Vector2.new(500, 560),
     can_resize = false
 })
-
-task.spawn(function()
-    while true do
-        task.wait(60)
-        silence:SetTitle("M14EBR | PAID | Fast Farming - " .. greeting())
-    end
-end)
 
 local tabs = {
     rebirths = silence:AddTab("Fast Rebirth"),
