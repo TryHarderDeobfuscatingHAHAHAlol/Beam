@@ -65,7 +65,7 @@ local function isWhitelisted()
 end
 
 if not isWhitelisted() then
-    LocalPlayer:Kick("From BossKenzou: Pukinanginamo magbayad ka muna sakin GAGO!")
+    LocalPlayer:Kick("From BossKenzou: gamit script gusto, magbayad ayaw? BOBO!")
     return
 end
 
@@ -2722,9 +2722,33 @@ tabs.other3.tpE = function(position)
     services.virtualinputmanager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
 end
 
+tabs.other3:AddLabel("All Machines Function are Working!")
+
+tabs.other3:AddLabel("——————————")
+
+tabs.other3:AddLabel("Industrial Machines")
+
+tabs.other3:AddButton("Industrial Bar Lift",function()
+    tabs.other3.tpE(Vector3.new(-5492.71, 61.06, 4643.64))
+end)
+
+tabs.other3:AddButton("Industrial Squat",function()
+    tabs.other3.tpE(Vector3.new(-5217.12, 61.06, 5418.08))
+end)
+
+tabs.other3:AddButton("Industrial Bench Press",function()
+    tabs.other3.tpE(Vector3.new(-5014.72, 117.92, 4467.35))
+end)
+
+tabs.other3:AddButton("Industrial Boulder",function()
+    tabs.other3.tpE(Vector3.new(-5456.43, 61.06, 5231.54))
+end)
+
+tabs.other3:AddLabel("~~~~~~~~~~")
+
 tabs.other3:AddLabel("Overcharged Machines")
 
-tabs.other3:AddButton("Overcharged Lift",function()
+tabs.other3:AddButton("Overcharged Bar Lift",function()
     tabs.other3.tpE(Vector3.new(-3023.363, 151.797, 4696.859))
 end)
 
@@ -2732,11 +2756,19 @@ tabs.other3:AddButton("Overcharged Squat",function()
     tabs.other3.tpE(Vector3.new(-2673.216, 151.797, 5494.047))
 end)
 
+tabs.other3:AddButton("Overcharged Bench Press",function()
+    tabs.other3.tpE(Vector3.new(-2399.94, 187.00, 4522.49))
+end)
+
+tabs.other3:AddButton("Overcharged Boulder",function()
+    tabs.other3.tpE(Vector3.new(-2984.65, 154.51, 5255.58))
+end)
+
 tabs.other3:AddLabel("~~~~~~~~~~")
 
 tabs.other3:AddLabel("Hallowed Machines")
 
-tabs.other3:AddButton("Hallowed Lift",function()
+tabs.other3:AddButton("Hallowed Bar Lift",function()
     tabs.other3.tpE(Vector3.new(5432.12, 85.35, 5715.02))
 end)
 
@@ -2744,12 +2776,16 @@ tabs.other3:AddButton("Hallowed Squat",function()
     tabs.other3.tpE(Vector3.new(4812.03, 85.35, 5839.05))
 end)
 
-tabs.other3:AddButton("Hallowed Bench",function()
+tabs.other3:AddButton("Hallowed Bench Press",function()
     tabs.other3.tpE(Vector3.new(5314.69, 142.13, 6807.71))
 end)
 
 tabs.other3:AddButton("Hallowed Pullups",function()
     tabs.other3.tpE(Vector3.new(4808.10, 102.34, 6857.22))
+end)
+
+tabs.other3:AddButton("Hallowed Boulder",function()
+    tabs.other3.tpE(Vector3.new(5292.21, 86.50, 5680.97))
 end)
 
 tabs.info:Show()
