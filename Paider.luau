@@ -145,10 +145,10 @@ local function greeting(hour)
     if hour >= 6 and hour < 12 then return "Magandang Umaga, " .. lp.LocalPlayer.DisplayName .. "!"
     elseif hour >= 12 and hour < 19 then return "Magandang Hapon, " .. lp.LocalPlayer.DisplayName .. "!"
     elseif hour >= 19 and hour < 22 then return "Magandang Gabi, " .. lp.LocalPlayer.DisplayName .. "!"
-    else return "Good Night Sayo TANGA, " .. lp.LocalPlayer.DisplayName .. "!" end
+    else return "Good Night Sayo BINGOT!, " .. lp.LocalPlayer.DisplayName .. "!" end
 end
 
-local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.luacache=" .. tostring(os.time()), true))()
+local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua", true))()
 local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. greeting(), {
     title_bar = {Color3.fromRGB(128, 128, 128), Color3.fromRGB(0, 0, 0), Color3.fromRGB(0, 0, 0)},
     title_bar_transparency = 0.2,
