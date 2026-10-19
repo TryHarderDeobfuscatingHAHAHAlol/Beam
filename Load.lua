@@ -627,6 +627,8 @@ tabs.rebirths.rebirths:GetPropertyChangedSignal("Value"):Connect(function()
     tabs.rebirths.updateStats()
 end)
 
+tabs.rebirths:AddLabel("")
+
 tabs.rebirths:AddLabel("Rebirthing")
 
 tabs.rebirths:AddSwitch("Fast Rebirth (Packs & Boss Pets Supported)", function(state)
