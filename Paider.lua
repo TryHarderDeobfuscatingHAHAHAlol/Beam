@@ -161,15 +161,15 @@ local silence = library:AddWindow("AN94 | PAID | Fast Farming - " .. greeting(),
 
 task.spawn(function()
     while true do
-        task.wait(60)
+        task.wait(5)
         silence:SetTitle("Silence | Fast Farming - " .. greeting())
     end
 end)
 
 local tabs = {
     rebirths = silence:AddTab("Fast Rebirth"),
-    strength = silence:AddTab("Fast Strength V1 (Boss Pet)"),
-    strength2 = silence:AddTab("Fast Strength V2 (Packs)"),
+    strength = silence:AddTab("Fast Farm V1 (Boss Pet)"),
+    strength2 = silence:AddTab("Fast Farm V2 (Packs)"),
     boss = silence:AddTab("Boss Killing"),
     other = silence:AddTab("MiscV1"),
 	other2 = silence:AddTab("MiscV2"),
@@ -2801,7 +2801,7 @@ end)
 
 tabs.other3.tpE = function(position)
     tabs.other3.character = lp.player.Character or lp.player.CharacterAdded:Wait()
-    tabs.other3.hrp = tabs.other.character:WaitForChild("HumanoidRootPart")
+    tabs.other3.hrp = tabs.other3.character:WaitForChild("HumanoidRootPart")
     tabs.other3.hrp.CFrame = CFrame.new(position)
     tabs.other3.hrp.AssemblyLinearVelocity = Vector3.zero
     tabs.other3.hrp.AssemblyAngularVelocity = Vector3.zero
@@ -2905,7 +2905,7 @@ tabs.info:AddLabel("💠 Script Status: [ ONLINE ]")
 tabs.info:AddLabel("🚀 PAID VERSION: 1.0")
 createSeparator()
 
--- [[ FOOTER SECTION - THE "ON DOWN" ANIMATION ]]
+-- [[ FOOTER SECTION - THE "ON TOP" ANIMATION ]]
 local wLabel = tabs.info:AddLabel("🔥 M14EBR ON TOP 🔥")
 wLabel.TextSize = 35
 wLabel.Font = Enum.Font.LuckiestGuy
