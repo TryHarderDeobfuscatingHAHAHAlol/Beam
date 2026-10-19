@@ -159,13 +159,6 @@ local silence = library:AddWindow("AN94 | PAID | Fast Farming - " .. greeting(),
     can_resize = false
 })
 
-task.spawn(function()
-    while true do
-        task.wait(5)
-        silence:SetTitle("Silence | Fast Farming - " .. greeting())
-    end
-end)
-
 local tabs = {
     rebirths = silence:AddTab("Fast Rebirth"),
     strength = silence:AddTab("Fast Farm V1 (Boss Pet)"),
