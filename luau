@@ -65,7 +65,7 @@ local function isWhitelisted()
 end
 
 if not isWhitelisted() then
-    LocalPlayer:Kick("Pukinanginamo nagbayad kaba sakin?!")
+    LocalPlayer:Kick("From BossKenzou: Pukinanginamo magbayad ka muna sakin GAGO!")
     return
 end
 
@@ -149,7 +149,7 @@ local function greeting(hour)
 end
 
 local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua", true))()
-local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. greeting(), {
+local silence = library:AddWindow("AN94 | PAID | Fast Farming - " .. greeting(), {
     title_bar = {Color3.fromRGB(128, 128, 128), Color3.fromRGB(0, 0, 0), Color3.fromRGB(0, 0, 0)},
     title_bar_transparency = 0.2,
     background = {Color3.fromRGB(40, 40, 40), Color3.fromRGB(0, 0, 0), Color3.fromRGB(80, 80, 80)},
@@ -309,13 +309,13 @@ local PETS = {
 	},
 	["Rainbow Boss Pet"] = {
 		repSpeed = 10,
-		strength = 7,
+		strength = 8,
 		durability = 0,
 		rebirth = 0,
 	},
 	["Legendary Boss Pet"] = {
 		repSpeed = 10,
-		strength = 10,
+		strength = 8,
 		durability = 0,
 		rebirth = 0,
 	},
@@ -490,16 +490,7 @@ tabs.rebirths.equippedCount = 0
 tabs.rebirths.currentPercent = 0
 tabs.rebirths.maxSlots = 12
 tabs.rebirths.strengthTarget = 0
-tabs.rebirths.generation = 0
-tabs.rebirths.adaptive = {
-    TargetSeconds = 3,
-    MinSeconds = 3,
-    RepsPerAward = 5,
-    MaxRate = 3295,
-    SendRate = lp.player.MembershipType == Enum.MembershipType.Premium and 750 or 1500,
-    StrengthPerAward = nil,
-    LastTrainingSeconds = nil
-}
+tabs.rebirths.repsPerBurst = 12
 tabs.rebirths.rebirthValueBefore = tabs.rebirths.rebirths.Value
 tabs.rebirths.Status = tabs.rebirths:AddLabel("Status: Inactive")
 tabs.rebirths.Runtime = tabs.rebirths:AddLabel("Runtime: 0d 0h 0m 0s")
@@ -581,133 +572,54 @@ tabs.rebirths.unequipAllPets = function()
     unequipConfiguredPets()
 end
 
-tabs.rebirths.isCurrent = function(generation)
-    return tabs.rebirths.running and tabs.rebirths.generation == generation
+tabs.rebirths.equipFarmingPets = function()
+    equipBestFarmingPets()
 end
 
-tabs.rebirths.equipFarmingPets = function(generation)
-    equipBestFarmingPets(function() return tabs.rebirths.isCurrent(generation) end)
+tabs.rebirths.equipRebirthPets = function()
+    equipBestRebirthPets()
 end
 
-tabs.rebirths.equipRebirthPets = function(generation)
-    equipBestRebirthPets(function() return tabs.rebirths.isCurrent(generation) end)
-end
+tabs.rebirths.performRebirth = function()
+    tabs.rebirths.strengthTarget = 5000 + tabs.rebirths.rebirths.Value * 2550
+    tabs.rebirths.repsPerBurst = lp.player.MembershipType == Enum.MembershipType.Premium and 6 or 12
 
-tabs.rebirths.updateAdaptiveSpeed = function(cycle, now, elapsed, gain, sent, estimate, remainingSeconds, desiredRate)
-    now = os.clock()
-    elapsed = now - cycle.SampleAt
-    if elapsed < 0.25 then return end
-    gain = tabs.rebirths.strength.Value - cycle.SampleStrength
-    sent = cycle.Sent - cycle.SampleSent
-    if gain > 0 and sent >= tabs.rebirths.adaptive.RepsPerAward then
-        estimate = gain * tabs.rebirths.adaptive.RepsPerAward / sent
-        tabs.rebirths.adaptive.StrengthPerAward = tabs.rebirths.adaptive.StrengthPerAward
-            and tabs.rebirths.adaptive.StrengthPerAward * 0.65 + estimate * 0.35 or estimate
-        remainingSeconds = math.max(0.25, tabs.rebirths.adaptive.TargetSeconds - cycle.TrainingSeconds)
-        desiredRate = math.max(0, cycle.Target - tabs.rebirths.strength.Value)
-            / tabs.rebirths.adaptive.StrengthPerAward * tabs.rebirths.adaptive.RepsPerAward / remainingSeconds
-        tabs.rebirths.adaptive.SendRate = math.clamp(desiredRate,
-            math.max(1, tabs.rebirths.adaptive.SendRate * 0.5),
-            math.min(tabs.rebirths.adaptive.MaxRate, tabs.rebirths.adaptive.SendRate * 2))
-    elseif gain == 0 then
-        return
-    end
-    cycle.SampleAt = now
-    cycle.SampleStrength = tabs.rebirths.strength.Value
-    cycle.SampleSent = cycle.Sent
-end
-
-tabs.rebirths.performRebirth = function(generation, cycle, now, character, humanoid, elapsed, estimate)
-    cycle = {
-        Target = 5000 + tabs.rebirths.rebirths.Value * 2550,
-        Rebirths = tabs.rebirths.rebirths.Value,
-        SampleAt = os.clock(),
-        SampleStrength = tabs.rebirths.strength.Value,
-        StartStrength = tabs.rebirths.strength.Value,
-        SampleSent = 0,
-        Sent = 0,
-        Tokens = 0,
-        LastAt = os.clock(),
-        TrainingSeconds = 0
-    }
-    if tabs.rebirths.adaptive.StrengthPerAward then
-        tabs.rebirths.adaptive.SendRate = math.clamp(
-            math.max(0, cycle.Target - tabs.rebirths.strength.Value)
-                / tabs.rebirths.adaptive.StrengthPerAward * tabs.rebirths.adaptive.RepsPerAward
-                / tabs.rebirths.adaptive.TargetSeconds,
-            1, tabs.rebirths.adaptive.MaxRate)
-    end
-    while tabs.rebirths.isCurrent(generation) and tabs.rebirths.rebirths.Value == cycle.Rebirths do
-        now = os.clock()
-        elapsed = math.max(0, now - cycle.LastAt)
-        cycle.LastAt = now
-        character = lp.player.Character
-        humanoid = character and character:FindFirstChildOfClass("Humanoid")
-        if humanoid and humanoid.Health > 0 then
-            cycle.TrainingSeconds = cycle.TrainingSeconds + elapsed
-            if tabs.rebirths.strength.Value >= cycle.Target then
-                if not cycle.ReachedAt then cycle.ReachedAt = cycle.TrainingSeconds end
-                if cycle.TrainingSeconds >= tabs.rebirths.adaptive.MinSeconds then break end
-                cycle.Tokens = 0
-            else
-                tabs.rebirths.updateAdaptiveSpeed(cycle)
-                cycle.Tokens = math.min(math.ceil(tabs.rebirths.adaptive.MaxRate * 0.1),
-                    cycle.Tokens + tabs.rebirths.adaptive.SendRate * math.min(0.1, elapsed))
-                while cycle.Tokens >= 1 and tabs.rebirths.isCurrent(generation)
-                    and tabs.rebirths.strength.Value < cycle.Target do
-                    services.muscleEvent:FireServer("rep")
-                    cycle.Sent = cycle.Sent + 1
-                    cycle.Tokens = cycle.Tokens - 1
-                end
-            end
-            tabs.rebirths.Status.Text = "Status: Strength Training | " .. string.format("%.1fs", cycle.TrainingSeconds)
-                .. " | " .. formatNumber(tabs.rebirths.adaptive.SendRate) .. " reps/s"
-        else
-            cycle.Tokens = 0
-            cycle.SampleAt = now
-            cycle.SampleStrength = tabs.rebirths.strength.Value
-            cycle.SampleSent = cycle.Sent
-            tabs.rebirths.Status.Text = "Status: Waiting for Respawn"
+    tabs.rebirths.repIndex = 1
+    while tabs.rebirths.running and tabs.rebirths.strength.Value < tabs.rebirths.strengthTarget do
+        tabs.rebirths.repIndex = 1
+        while tabs.rebirths.repIndex <= tabs.rebirths.repsPerBurst do
+            services.muscleEvent:FireServer("rep")
+            tabs.rebirths.repIndex = tabs.rebirths.repIndex + 1
         end
-        services.runservice.Heartbeat:Wait()
+        task.wait(0.02)
     end
-    if not tabs.rebirths.isCurrent(generation) or tabs.rebirths.rebirths.Value ~= cycle.Rebirths then return end
-    if tabs.rebirths.strength.Value < cycle.Target then return end
-    if cycle.Sent > 0 and tabs.rebirths.strength.Value > cycle.StartStrength then
-        estimate = (tabs.rebirths.strength.Value - cycle.StartStrength)
-            * tabs.rebirths.adaptive.RepsPerAward / cycle.Sent
-        tabs.rebirths.adaptive.StrengthPerAward = tabs.rebirths.adaptive.StrengthPerAward
-            and tabs.rebirths.adaptive.StrengthPerAward * 0.5 + estimate * 0.5 or estimate
-    end
-    tabs.rebirths.adaptive.LastTrainingSeconds = cycle.ReachedAt or cycle.TrainingSeconds
-    tabs.rebirths.adaptive.SendRate = math.clamp(tabs.rebirths.adaptive.SendRate
-        * math.clamp(tabs.rebirths.adaptive.LastTrainingSeconds / tabs.rebirths.adaptive.TargetSeconds, 0.65, 1.35),
-        1, tabs.rebirths.adaptive.MaxRate)
-    tabs.rebirths.Status.Text = "Status: Switching to Rebirth Pets"
-    tabs.rebirths.equipRebirthPets(generation)
-    task.wait(0.25)
-    while tabs.rebirths.isCurrent(generation) and tabs.rebirths.rebirths.Value == cycle.Rebirths do
-        services.replicatedstorage.rEvents.rebirthRemote:InvokeServer("rebirthRequest")
-        task.wait(0.05)
+
+    if tabs.rebirths.running and tabs.rebirths.strength.Value >= tabs.rebirths.strengthTarget then
+        tabs.rebirths.equipRebirthPets()
+        task.wait(0.25)
+        tabs.rebirths.rebirthValueBefore = tabs.rebirths.rebirths.Value
+
+        repeat
+            services.replicatedstorage.rEvents.rebirthRemote:InvokeServer("rebirthRequest")
+            task.wait(0.05)
+        until tabs.rebirths.rebirths.Value > tabs.rebirths.rebirthValueBefore or not tabs.rebirths.running
     end
 end
 
 tabs.rebirths.startWorker = function()
-    if tabs.rebirths.workerActive then return end
+    if tabs.rebirths.workerActive then
+        return
+    end
+
     tabs.rebirths.workerActive = true
-    task.spawn(function(generation, success)
-        success = pcall(function()
-            while tabs.rebirths.isCurrent(generation) do
-                tabs.rebirths.equipFarmingPets(generation)
-                if not tabs.rebirths.isCurrent(generation) then break end
-                tabs.rebirths.performRebirth(generation)
-                task.wait(0.5)
-            end
-        end)
+    task.spawn(function()
+        while tabs.rebirths.running do
+            tabs.rebirths.equipFarmingPets()
+            tabs.rebirths.performRebirth()
+            task.wait(0.5)
+        end
         tabs.rebirths.workerActive = false
-        if not success then task.wait(0.5) end
-        if tabs.rebirths.running then tabs.rebirths.startWorker() end
-    end, tabs.rebirths.generation)
+    end)
 end
 
 tabs.rebirths.rebirths:GetPropertyChangedSignal("Value"):Connect(function()
@@ -715,8 +627,7 @@ tabs.rebirths.rebirths:GetPropertyChangedSignal("Value"):Connect(function()
     tabs.rebirths.updateStats()
 end)
 
-tabs.rebirths.Switch = tabs.rebirths:AddSwitch("Fast Rebirth (Packs & Boss Pets Supported)", function(state)
-    tabs.rebirths.generation = tabs.rebirths.generation + 1
+tabs.rebirths:AddSwitch("Fast Rebirth (Packs & Rep Pets Supported)", function(state)
     tabs.rebirths.running = state
     if state then
         tabs.rebirths.hasStarted = true
@@ -743,8 +654,7 @@ tabs.rebirths.Switch = tabs.rebirths:AddSwitch("Fast Rebirth (Packs & Boss Pets 
         tabs.rebirths.Status.TextColor3 = tabs.rebirths.hasStarted and Color3.fromRGB(255, 180, 70) or Color3.fromRGB(255, 80, 80)
         tabs.rebirths.updateRuntime()
     end
-end)
-tabs.rebirths.Switch:Set(false)
+end):Set(false)
 
 task.spawn(function()
     while true do
@@ -2587,7 +2497,7 @@ function equipPetsByName(name)
     end
 end
 
-tabs.other2:AddLabel("Equip Rep Pets")
+tabs.other2:AddLabel("Equip Boss Pets")
 
 tabs.other2:AddButton("Common Boss Pet", function()
     unequipPets()
@@ -2812,6 +2722,8 @@ tabs.other3.tpE = function(position)
     services.virtualinputmanager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
 end
 
+tabs.other3:AddLabel("Overcharged Machines")
+
 tabs.other3:AddButton("Overcharged Lift",function()
     tabs.other3.tpE(Vector3.new(-3023.363, 151.797, 4696.859))
 end)
@@ -2819,6 +2731,10 @@ end)
 tabs.other3:AddButton("Overcharged Squat",function()
     tabs.other3.tpE(Vector3.new(-2673.216, 151.797, 5494.047))
 end)
+
+tabs.other3:AddLabel("~~~~~~~~~~")
+
+tabs.other3:AddLabel("Hallowed Machines")
 
 tabs.other3:AddButton("Hallowed Lift",function()
     tabs.other3.tpE(Vector3.new(5432.12, 85.35, 5715.02))
@@ -2843,7 +2759,7 @@ local function createSeparator()
 end
 
 -- [[ HEADER SECTION ]]
-tabs.info:AddLabel("Welcome to my M14EBR | PAID VERSION Script").TextSize = 20
+tabs.info:AddLabel("Welcome to AN94 | PAID Script").TextSize = 20
 createSeparator()
 
 -- [[ DEV CREDITS WITH RAINBOW EFFECT ]]
@@ -2897,11 +2813,11 @@ end)
 
 -- [[ STATUS SECTION ]]
 tabs.info:AddLabel("💠 Script Status: [ ONLINE ]")
-tabs.info:AddLabel("🚀 PAID VERSION: 1.0")
+tabs.info:AddLabel("🚀 PAID VERSION: 1.1")
 createSeparator()
 
--- [[ FOOTER SECTION - THE "ON DOWN" ANIMATION ]]
-local wLabel = tabs.info:AddLabel("🔥 M14EBR ON TOP 🔥")
+-- [[ FOOTER SECTION - THE "ON TOP" ANIMATION ]]
+local wLabel = tabs.info:AddLabel("🔥 AN94 ON TOP 🔥")
 wLabel.TextSize = 35
 wLabel.Font = Enum.Font.LuckiestGuy
 
