@@ -142,10 +142,10 @@ end
 
 local function greeting(hour)
     hour = hour or os.date("*t").hour
-    if hour >= 6 and hour < 12 then return "Magandang Umaga! " .. LocalPlayer.DisplayName .. "!"
-    elseif hour >= 12 and hour < 19 then return "Magandang Hapon! " .. LocalPlayer.DisplayName .. "!"
-    elseif hour >= 19 and hour < 22 then return "Magandang Gabi! " .. LocalPlayer.DisplayName .. "!"
-    else return "Good Night sayo BINGOT! " .. LocalPlayer.DisplayName .. "!" end
+    if hour >= 6 and hour < 12 then return "Magandang Umaga! " .. LocalPlayer.DisplayName
+    elseif hour >= 12 and hour < 19 then return "Magandang Hapon! " .. LocalPlayer.DisplayName
+    elseif hour >= 19 and hour < 22 then return "Magandang Gabi! " .. LocalPlayer.DisplayName
+    else return "Good Night sayo BINGOT! " .. LocalPlayer.DisplayName end
 end
 
 local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua", true))()
@@ -2701,7 +2701,6 @@ tabs.other2:AddButton("Anti Lag", function()
     })
 end)
 
-
 tabs.other2:AddButton("Full Optimization", function()
     tabs.other2.playerGui = lp.player:WaitForChild("PlayerGui")
 
@@ -2815,11 +2814,11 @@ end
 tabs.other3:AddLabel("Overcharged Auto Lifts")
 
 tabs.other3:AddButton("Overcharged Lift",function()
-    tabs.other.tpE(Vector3.new(-3023.363, 151.797, 4696.859))
+    tabs.other3.tpE(Vector3.new(-3023.363, 151.797, 4696.859))
 end)
 
 tabs.other3:AddButton("Overcharged Squat",function()
-    tabs.other.tpE(Vector3.new(-2673.216, 151.797, 5494.047))
+    tabs.other3.tpE(Vector3.new(-2673.216, 151.797, 5494.047))
 end)
 
 tabs.other3:AddLabel("~~~~~~~~~~")
@@ -2827,19 +2826,19 @@ tabs.other3:AddLabel("~~~~~~~~~~")
 tabs.other3:AddLabel("Hallowed Auto Lifts")
 
 tabs.other3:AddButton("Hallowed Lift",function()
-    tabs.other.tpE(Vector3.new(5432.12, 85.35, 5715.02))
+    tabs.other3.tpE(Vector3.new(5432.12, 85.35, 5715.02))
 end)
 
 tabs.other3:AddButton("Hallowed Squat",function()
-    tabs.other.tpE(Vector3.new(4812.03, 85.35, 5839.05))
+    tabs.other3.tpE(Vector3.new(4812.03, 85.35, 5839.05))
 end)
 
 tabs.other3:AddButton("Hallowed Bench",function()
-    tabs.other.tpE(Vector3.new(5314.69, 142.13, 6807.71))
+    tabs.other3.tpE(Vector3.new(5314.69, 142.13, 6807.71))
 end)
 
 tabs.other3:AddButton("Hallowed Pullups",function()
-    tabs.other.tpE(Vector3.new(4808.10, 102.34, 6857.22))
+    tabs.other3.tpE(Vector3.new(4808.10, 102.34, 6857.22))
 end)
 
 tabs.info:Show()
@@ -2849,7 +2848,7 @@ local function createSeparator()
 end
 
 -- [[ HEADER SECTION ]]
-tabs.info:AddLabel("Welcome to AN94 | PAID VERSION Script").TextSize = 20
+tabs.info:AddLabel("Welcome to AN94 | PAID Script").TextSize = 20
 createSeparator()
 
 -- [[ DEV CREDITS WITH RAINBOW EFFECT ]]
