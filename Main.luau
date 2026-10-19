@@ -143,8 +143,8 @@ end
 local function greeting(hour)
     hour = hour or os.date("*t").hour
     if hour >= 6 and hour < 12 then return "Magandang Umaga! " .. LocalPlayer.DisplayName
-    elseif hour >= 12 and hour < 19 then return "Magandang Hapon! " .. LocalPlayer.DisplayName
-    elseif hour >= 19 and hour < 22 then return "Magandang Gabi! " .. LocalPlayer.DisplayName
+    elseif hour >= 12 and hour < 18 then return "Magandang Hapon! " .. LocalPlayer.DisplayName
+    elseif hour >= 18 and hour < 22 then return "Magandang Gabi! " .. LocalPlayer.DisplayName
     else return "Good Night Sayo Bingot! " .. LocalPlayer.DisplayName end
 end
 
@@ -627,7 +627,9 @@ tabs.rebirths.rebirths:GetPropertyChangedSignal("Value"):Connect(function()
     tabs.rebirths.updateStats()
 end)
 
-tabs.rebirths:AddSwitch("Fast Rebirth (Packs & Rep Pets Supported)", function(state)
+tabs.rebirths:AddLabel("Rebirthing")
+
+tabs.rebirths:AddSwitch("Fast Rebirth (Packs & Boss Pets Supported)", function(state)
     tabs.rebirths.running = state
     if state then
         tabs.rebirths.hasStarted = true
@@ -933,7 +935,7 @@ task.spawn(function()
     end
 end)
 
-tabs.strength:AddLabel("Fast Strength (Pwede sa Boss Pets & Pack Pets)")
+tabs.strength:AddLabel("Fast FarmV1 (Pwede sa Boss Pets & Pack Pets)")
 
 -- Strength Tab (For bad devices)
 
@@ -1113,7 +1115,7 @@ tabs.strength2.durability:GetPropertyChangedSignal("Value"):Connect(function()
     tabs.strength2.updatePace()
 end)
 
-tabs.strength2:AddTextBox("Rep Speed:", function(inputText)
+tabs.strength2:AddTextBox("Recommended Speed: 20-40", function(inputText)
     tabs.strength2.speedValue = tonumber(inputText)
     if tabs.strength2.speedValue then
         tabs.strength2.repSpeed = math.clamp(math.floor(tabs.strength2.speedValue), 1, 1000)
@@ -1163,8 +1165,7 @@ task.spawn(function()
         task.wait(1)
     end
 end)
-tabs.strength2:AddLabel("This Fast Strength (Packs) is for those who have Packs")
-tabs.strength2:AddLabel("Recommended Rep Speed: 20-40")
+tabs.strength2:AddLabel("Fast FarmV2 for Packs")
 
 tabs.boss.runtime = {}
 
