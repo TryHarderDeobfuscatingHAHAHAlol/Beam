@@ -140,8 +140,16 @@ services.touchParts = function(part, hand, state)
     return pcall(firetouchinterest, part, hand, state)
 end
 
+local function greeting(hour)
+    hour = hour or os.date("*t").hour
+    if hour >= 6 and hour < 12 then return "Magandang Umaga! " .. LocalPlayer.DisplayName
+    elseif hour >= 12 and hour < 19 then return "Magandang Hapon! " .. LocalPlayer.DisplayName
+    elseif hour >= 19 and hour < 22 then return "Magandang Gabi! " .. LocalPlayer.DisplayName
+    else return "Good Night! " .. LocalPlayer.DisplayName end
+end
+
 local library = loadstring(game:HttpGet("https://codeberg.org/PRUEBACUENTAZEUS/PaidLib/raw/branch/main/M14Library.lua", true))()
-local silence = library:AddWindow("M14EBR | Paid Version - Fast Farming", {
+local silence = library:AddWindow("M14EBR | PAID | Fast Farming - " .. greeting(), {
     title_bar = {Color3.fromRGB(128, 128, 128), Color3.fromRGB(0, 0, 0), Color3.fromRGB(0, 0, 0)},
     title_bar_transparency = 0.2,
     background = {Color3.fromRGB(40, 40, 40), Color3.fromRGB(0, 0, 0), Color3.fromRGB(80, 80, 80)},
@@ -151,13 +159,21 @@ local silence = library:AddWindow("M14EBR | Paid Version - Fast Farming", {
     can_resize = false
 })
 
+task.spawn(function()
+    while true do
+        task.wait(60)
+        silence:SetTitle("Silence | Fast Farming - " .. greeting())
+    end
+end)
+
 local tabs = {
     rebirths = silence:AddTab("Fast Rebirth"),
-    strength = silence:AddTab("Fast Strength V1 (Boss Pet)"),
-    strength2 = silence:AddTab("Fast Strength V2 (Packs)"),
-    boss = silence:AddTab("Boss Killing"),
+    strength = silence:AddTab("Fast FarmV1 (Boss Pet)"),
+    strength2 = silence:AddTab("Fast FarmV2 (Packs)"),
+    boss = silence:AddTab("Kill Boss"),
     other = silence:AddTab("MiscV1"),
 	other2 = silence:AddTab("MiscV2"),
+	other3 = silence:AddTab("MiscV3"),
     info = silence:AddTab("Info")
 }
 
@@ -2538,43 +2554,6 @@ lp.player.CharacterAdded:Connect(function(character, head)
 end)
 
 
-
-tabs.other.tpE = function(position)
-    tabs.other.character = lp.player.Character or lp.player.CharacterAdded:Wait()
-    tabs.other.hrp = tabs.other.character:WaitForChild("HumanoidRootPart")
-    tabs.other.hrp.CFrame = CFrame.new(position)
-    tabs.other.hrp.AssemblyLinearVelocity = Vector3.zero
-    tabs.other.hrp.AssemblyAngularVelocity = Vector3.zero
-    task.wait(0.4)
-    services.virtualinputmanager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
-    task.wait(0.1)
-    services.virtualinputmanager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
-end
-
-tabs.other:AddButton("Overcharged Lift",function()
-    tabs.other.tpE(Vector3.new(-3023.363, 151.797, 4696.859))
-end)
-
-tabs.other:AddButton("Overcharged Squat",function()
-    tabs.other.tpE(Vector3.new(-2673.216, 151.797, 5494.047))
-end)
-
-tabs.other:AddButton("Hallowed Lift",function()
-    tabs.other.tpE(Vector3.new(5432.12, 85.35, 5715.02))
-end)
-
-tabs.other:AddButton("Hallowed Squat",function()
-    tabs.other.tpE(Vector3.new(4812.03, 85.35, 5839.05))
-end)
-
-tabs.other:AddButton("Hallowed Bench",function()
-    tabs.other.tpE(Vector3.new(5314.69, 142.13, 6807.71))
-end)
-
-tabs.other:AddButton("Hallowed Pullups",function()
-    tabs.other.tpE(Vector3.new(4808.10, 102.34, 6857.22))
-end)
-
 tabs.other:AddButton("Equip Best Rep Pets", function()
     equipBestFarmingPets()
 end)
@@ -2725,13 +2704,13 @@ end)
 tabs.other2:AddButton("Full Optimization", function()
     tabs.other2.playerGui = lp.player:WaitForChild("PlayerGui")
 
-    for _, gui in pairs(tabs.other.playerGui:GetChildren()) do
+    for _, gui in pairs(tabs.other2.playerGui:GetChildren()) do
         if gui:IsA("ScreenGui") then
             gui:Destroy()
         end
     end
 
-    tabs.other.darkenSky = function()
+    tabs.other2.darkenSky = function()
         for _, v in pairs(services.lighting:GetChildren()) do
             if v:IsA("Sky") then
                 v:Destroy()
@@ -2816,6 +2795,45 @@ end
     tabs.other2.darkenSky()
     services.replicatedstorage.shared.assets.ui.strengthFrame:Destroy()
     services.replicatedstorage.shared.assets.ui.durabilityFrame:Destroy()
+end)
+
+
+-- Other3 Tab
+
+tabs.other3.tpE = function(position)
+    tabs.other3.character = lp.player.Character or lp.player.CharacterAdded:Wait()
+    tabs.other3.hrp = tabs.other3.character:WaitForChild("HumanoidRootPart")
+    tabs.other3.hrp.CFrame = CFrame.new(position)
+    tabs.other3.hrp.AssemblyLinearVelocity = Vector3.zero
+    tabs.other3.hrp.AssemblyAngularVelocity = Vector3.zero
+    task.wait(0.4)
+    services.virtualinputmanager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+    task.wait(0.1)
+    services.virtualinputmanager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+end
+
+tabs.other3:AddButton("Overcharged Lift",function()
+    tabs.other3.tpE(Vector3.new(-3023.363, 151.797, 4696.859))
+end)
+
+tabs.other3:AddButton("Overcharged Squat",function()
+    tabs.other3.tpE(Vector3.new(-2673.216, 151.797, 5494.047))
+end)
+
+tabs.other3:AddButton("Hallowed Lift",function()
+    tabs.other3.tpE(Vector3.new(5432.12, 85.35, 5715.02))
+end)
+
+tabs.other3:AddButton("Hallowed Squat",function()
+    tabs.other3.tpE(Vector3.new(4812.03, 85.35, 5839.05))
+end)
+
+tabs.other3:AddButton("Hallowed Bench",function()
+    tabs.other3.tpE(Vector3.new(5314.69, 142.13, 6807.71))
+end)
+
+tabs.other3:AddButton("Hallowed Pullups",function()
+    tabs.other3.tpE(Vector3.new(4808.10, 102.34, 6857.22))
 end)
 
 tabs.info:Show()
